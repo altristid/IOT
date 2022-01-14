@@ -16,10 +16,12 @@ def on_connect(client, userdata, flags, rc):
     # reconnect then subscriptions will be renewed.
     #client.subscribe("$SYS/#")
 
-
+def on_disconnect(client, userdata,rc=0):
+    logging.debug("DisConnected result code "+str(rc))
+    client.loop_stop()
 def on_publish(client, userdata,result):
-    print(str(result))
-    logging.info(str(result))
+    print("On publish result :"+str(result))
+    logging.info("On publish result :"+str(result))
     pass
 def getDirection(val):
     print(str(checkerKeys))
@@ -45,8 +47,10 @@ def ArduinoGetData(stationId):
 
     
 client = mqtt.Client()
+client.loop_start()
 client.on_connect = on_connect
 client.on_publish=on_publish
+client.on_disconnect=on_disconnect
 client.tls_set("/home/toto/ca2.crt")
 #client.tls_insecure_set(True)
 
@@ -58,7 +62,7 @@ while(True):
     client.publish("meteo/meteo",ArduinoGetData(2),1)
     #REIMS
     client.publish("meteo/meteo",ArduinoGetData(3),1)
-    time.sleep(3*60*60)
+    time.sleep(60*60)
 
 
 # Blocking call that processes network traffic, dispatches callbacks and
