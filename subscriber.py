@@ -11,7 +11,7 @@ def on_connect(client, userdata, flags, rc):
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("meteo/meteo")
+    client.subscribe("meteo/meteo",1)
 
 
 # The callback for when a PUBLISH message is received from the server.
